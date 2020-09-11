@@ -11,6 +11,8 @@ class Transaction
      * start off with an empty transaction
      */
     private $transactionArray = array();
+    private $errorMessage = '';
+    private $transactionError = 0;
 
     /*
      * commit the created transaction to the database
@@ -21,9 +23,7 @@ class Transaction
     {
         if ($this->transactionArray != array()) {
             $json = $this->createTransactionJSON();
-            var_dump($json);
-            die();
-            $stmt = $pdo->prepare("INSERT INTO " . $_SERVER['shopdb'] . ".transactions(transaction) VALUES (?)");
+            $stmt = $pdo->prepare("INSERT INTO transactions(transaction) VALUES (?)");
             $stmt->bindParam(1, $json);
             if ($stmt->execute()) {
                 return true;
@@ -36,8 +36,70 @@ class Transaction
     }
 
     /*
+     * this function currently requires a mysqli database connection, wich is only used to run the real_escape_string function
+     * the actual queries are run as pdo prepared statements
+     */
+    public function runTransaction($json, $pdo, $mysqli): bool
+    {
+        //decode as array, not object
+        $this->transactionArray = json_decode($json, 1);
+        foreach ($this->transactionArray as $transaction) {
+            $data = $transaction['data'];
+            switch ($transaction['action']) {
+                case 'insert':
+                    $database = $data['database-name'] . '.' . $data['table-name'];
+                    $sql = "INSERT INTO " . $mysqli->real_escape_string($database) . "(";
+                    for ($i = 0; $i < sizeof($data['fields']); $i++) {
+                        if ($i == 0) {
+                            $sql .= $mysqli->real_escape_string($data['fields'][$i]);
+                        } else {
+                            $sql .= ", " . $mysqli->real_escape_string($data['fields'][$i]);
+                        }
+                    }
+                    $sql .= ") VALUES (";
+                    for ($i = 0; $i < sizeof($data['values']); $i++) {
+                        if ($i == 0) {
+                            $sql .= "?";
+                        } else {
+                            $sql .= ", ?";
+                        }
+                    }
+                    $sql .= ")";
+
+                    var_dump($sql);
+                    $stmt = $pdo->prepare($sql);
+
+                    for ($i = 1; $i <= sizeof($data['values']); $i++) {
+                        $stmt->bindParam($i, $data['values'][$i - 1]);
+                    }
+
+                    if (!$stmt->execute()) {
+                        $this->transactionError = 1;
+                        $this->errorMessage .= $stmt->errorInfo() . ' ';
+                    }
+                    break;
+                case 'update':
+                    var_dump($this->transactionArray);
+                    break;
+                default:
+                    $this->transactionError = 1;
+                    $this->errorMessage .= 'Unsupported transaction action ' . $this->transactionArray['action'] . '.';
+                    throw new Exception('Unsupported transaction action');
+            }
+        }
+        return $this->transactionError;
+    }
+
+    public function getPendingTransactions($pdo): array
+    {
+        $stmt = $pdo->query("SELECT transaction FROM transactions WHERE bearbeitet=0");
+        $return = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $return;
+    }
+
+    /*
      * this function expects an sql statement designed for pdo prepared statements and the associated values in an array, in the correct order
-     * this function can be run as many trimes as needed and will then combine sql statements into one large transaction
+     * this function can be run as many times as needed and will then combine sql statements into one large transaction
      * this function is responsible for creating the transaction array from the sql string
      */
     public function addTransation($sql, $values, $whereFields = array(), $whereValues = array())
@@ -59,12 +121,13 @@ class Transaction
         $final['data']['fields'] = $fields;
         $final['data']['values'] = $values;
 
+        //TODO implement where with database names, not just fields (for example with nested arrays, first beeing database, second fieldname)
         if (strpos($sql, "WHERE") !== false) {
             if (count($whereFields) != 0 and count($whereFields) != 0) {
                 if (count($whereFields) == count($whereValues))
-                $final['data']['where']['fields'] = $whereFields;
+                    $final['data']['where']['fields'] = $whereFields;
                 $final['data']['where']['values'] = $whereValues;
-            }else{
+            } else {
                 throw new Exception('The number of fields for your where clause does not match the number of values you gave');
             }
         }
@@ -156,7 +219,7 @@ class Transaction
     /*
      * this function returns the transaction object as JSON
      */
-    private function createTransactionJSON(): string
+    public function createTransactionJSON(): string
     {
         return json_encode($this->transactionArray);
     }
