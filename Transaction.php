@@ -102,7 +102,6 @@ class Transaction
                         }
                     }
 
-                    var_dump($sql);
                     $stmt = $pdo->prepare($sql);
                     for ($i = 0; $i < count($data['fields']) + count($data['where']['fields']); $i++) {
                         if ($i < count($data['fields'])) {
@@ -110,7 +109,6 @@ class Transaction
                         } else {
                             $stmt->bindParam($i + 1, $data['where']['values'][$i - count($data['fields'])]);
                         }
-                        var_dump('test');
                     }
                     if (!$stmt->execute()){
                         var_dump($stmt->errorInfo());

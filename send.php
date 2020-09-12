@@ -32,7 +32,6 @@ foreach ($transactions as $transaction) {
 
     //execute post
     $result = curl_exec($ch);
-    var_dump($result);
 
     if ($result == 'success') {
         /*$sql = "UPDATE shop.transactions SET bearbeitet=1 WHERE id=?";
