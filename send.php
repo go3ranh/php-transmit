@@ -34,11 +34,10 @@ foreach ($transactions as $transaction) {
     $result = curl_exec($ch);
 
     if ($result == 'success') {
-        /*$sql = "UPDATE shop.transactions SET bearbeitet=1 WHERE id=?";
+        $sql = "UPDATE shop.transactions SET bearbeitet=1 WHERE id=?";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(1, $transaction['id']);
-        $stmt->execute();*/
-        echo "$result\n";
+        $stmt->execute();
     } else {
         echo $result . "\n";
     }

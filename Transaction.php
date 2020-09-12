@@ -83,7 +83,6 @@ class Transaction
                     }
                     break;
                 case 'update':
-                    var_dump($this->transactionArray);
                     $database = $data['database-name'] . '.' . $data['table-name'];
                     $sql = "UPDATE " . $mysqli->real_escape_string($database) . "SET ";
                     for ($i = 0; $i < count($data['fields']); $i++) {
@@ -110,8 +109,9 @@ class Transaction
                             $stmt->bindParam($i + 1, $data['where']['values'][$i - count($data['fields'])]);
                         }
                     }
-                    if (!$stmt->execute()){
-                        var_dump($stmt->errorInfo());
+                    if (!$stmt->execute()) {
+                        $this->transactionError = 1;
+                        $this->errorMessage .= $stmt->errorInfo() . '.';
                     }
                     break;
                 default:
@@ -135,7 +135,7 @@ class Transaction
 
     public function getPendingTransactions($pdo): array
     {
-        $stmt = $pdo->query("SELECT transaction FROM transactions WHERE bearbeitet=0");
+        $stmt = $pdo->query("SELECT id, transaction FROM transactions WHERE bearbeitet=0");
         $return = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $return;
     }
