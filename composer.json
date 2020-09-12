@@ -2,7 +2,7 @@
     "name": "goeranh/php-transmit",
     "description": "PHP-Scripts/Classes for mirroring database calls onto another server",
     "type": "library",
-    "license": "BSD 2-Clause License",
+    "license": "BSD-2-Clause",
     "authors": [
         {
             "name": "Goeran Heinemann",

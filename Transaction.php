@@ -5,6 +5,11 @@
  * it can currently parse SQL INSERT and UPDATE statements
  */
 
+namespace goeranh\Transmit;
+
+use Exception;
+use PDO;
+
 class Transaction
 {
     /*
@@ -66,7 +71,6 @@ class Transaction
                     }
                     $sql .= ")";
 
-                    var_dump($sql);
                     $stmt = $pdo->prepare($sql);
 
                     for ($i = 1; $i <= sizeof($data['values']); $i++) {
@@ -80,6 +84,37 @@ class Transaction
                     break;
                 case 'update':
                     var_dump($this->transactionArray);
+                    $database = $data['database-name'] . '.' . $data['table-name'];
+                    $sql = "UPDATE " . $mysqli->real_escape_string($database) . "SET ";
+                    for ($i = 0; $i < count($data['fields']); $i++) {
+                        if ($i == 0) {
+                            $sql .= $mysqli->real_escape_string($data['fields'][$i]) . "=?";
+                        } else {
+                            $sql .= ", " . $mysqli->real_escape_string($data['fields'][$i]) . "=?";
+                        }
+                    }
+                    $sql .= " WHERE ";
+                    for ($i = 0; $i < count($data['where']['fields']); $i++) {
+                        if ($i == 0) {
+                            $sql .= $mysqli->real_escape_string($data['where']['fields'][$i]) . "=?";
+                        } else {
+                            $sql .= " and " . $mysqli->real_escape_string($data['where']['fields'][$i]) . "=?";
+                        }
+                    }
+
+                    var_dump($sql);
+                    $stmt = $pdo->prepare($sql);
+                    for ($i = 0; $i < count($data['fields']) + count($data['where']['fields']); $i++) {
+                        if ($i < count($data['fields'])) {
+                            $stmt->bindParam($i + 1, $data['values'][$i]);
+                        } else {
+                            $stmt->bindParam($i + 1, $data['where']['values'][$i - count($data['fields'])]);
+                        }
+                        var_dump('test');
+                    }
+                    if (!$stmt->execute()){
+                        var_dump($stmt->errorInfo());
+                    }
                     break;
                 default:
                     $this->transactionError = 1;
@@ -87,6 +122,16 @@ class Transaction
                     throw new Exception('Unsupported transaction action');
             }
         }
+        return $this->transactionError;
+    }
+
+    public function getErrorMessages(): string
+    {
+        return $this->errorMessage;
+    }
+
+    public function getErrorCode(): int
+    {
         return $this->transactionError;
     }
 
@@ -123,7 +168,7 @@ class Transaction
 
         //TODO implement where with database names, not just fields (for example with nested arrays, first beeing database, second fieldname)
         if (strpos($sql, "WHERE") !== false) {
-            if (count($whereFields) != 0 and count($whereFields) != 0) {
+            if (count($whereFields) != 0 and count($whereValues) != 0) {
                 if (count($whereFields) == count($whereValues))
                     $final['data']['where']['fields'] = $whereFields;
                 $final['data']['where']['values'] = $whereValues;

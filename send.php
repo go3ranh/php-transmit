@@ -1,5 +1,8 @@
 <?php
 include "Transaction.php";
+
+use goeranh\Transmit\Transaction;
+
 include "../../config/config.php";
 include "../../config/db.php";
 include 'config.php';
@@ -8,10 +11,9 @@ $transaction = new Transaction();
 $transactions = $transaction->getPendingTransactions($pdo);
 
 foreach ($transactions as $transaction) {
-    $trdata = json_decode($transaction['transaction']);
     $submit = array();
     $submit['token'] = $token;
-    $submit['transactions'] = $trdata;
+    $submit['transactions'] = $transaction['transaction'];
 
 
     //url-ify the data for the POST
