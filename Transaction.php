@@ -24,6 +24,11 @@ class Transaction
      * expects to be given the database connection object
      * returns either true or false, depending on the success of the write to the database
      */
+    /**
+     * @param $pdo
+     * @return bool
+     * @throws Exception
+     */
     public function commit($pdo): bool
     {
         if ($this->transactionArray != array()) {
@@ -43,6 +48,13 @@ class Transaction
     /*
      * this function currently requires a mysqli database connection, wich is only used to run the real_escape_string function
      * the actual queries are run as pdo prepared statements
+     */
+    /**
+     * @param $json
+     * @param $pdo
+     * @param $mysqli
+     * @return bool
+     * @throws Exception
      */
     public function runTransaction($json, $pdo, $mysqli): bool
     {
@@ -129,16 +141,26 @@ class Transaction
         return $this->transactionError;
     }
 
+    /**
+     * @return string
+     */
     public function getErrorMessages(): string
     {
         return $this->errorMessage;
     }
 
+    /**
+     * @return int
+     */
     public function getErrorCode(): int
     {
         return $this->transactionError;
     }
 
+    /**
+     * @param $pdo
+     * @return array
+     */
     public function getPendingTransactions($pdo): array
     {
         $stmt = $pdo->query("SELECT id, transaction FROM transactions WHERE bearbeitet=0");
@@ -146,6 +168,11 @@ class Transaction
         return $return;
     }
 
+    /**
+     * @param $id
+     * @param $pdo
+     * @return bool
+     */
     public function markAsSent($id, $pdo): bool
     {
         $sql = "UPDATE shop.transactions SET bearbeitet=1 WHERE id=?";
@@ -158,14 +185,29 @@ class Transaction
     }
 
     //todo substitute database names for shared hosting
+
+    /**
+     * @param $from
+     * @param $to
+     */
     public function substituteDatabaseName($from, $to){
 
     }
 
+    /**
+     * @param $pdo
+     * @return int
+     */
     public function getLastInsertID($pdo):int{
         return $pdo->lastInsertId();
     }
 
+    /**
+     * @param $transaction
+     * @param $token
+     * @param $url
+     * @return string
+     */
     public function sendTransaction($transaction, $token, $url): string
     {
         $submit = array();
@@ -191,10 +233,12 @@ class Transaction
         return curl_exec($ch);
     }
 
-    /*
-     * this function expects an sql statement designed for pdo prepared statements and the associated values in an array, in the correct order
-     * this function can be run as many times as needed and will then combine sql statements into one large transaction
-     * this function is responsible for creating the transaction array from the sql string
+    /**
+     * @param $sql
+     * @param $values
+     * @param array $whereFields
+     * @param array $whereValues
+     * @throws Exception
      */
     public function addTransation($sql, $values, $whereFields = array(), $whereValues = array())
     {
@@ -229,8 +273,11 @@ class Transaction
         $this->transactionArray[] = $final;
     }
 
-    /*
-     * defers the mysql table name from the given sql query, if supported
+    /**
+     * @param $type
+     * @param $sql
+     * @return string
+     * @throws Exception
      */
     private function getTable($type, $sql): string
     {
@@ -252,8 +299,11 @@ class Transaction
         }
     }
 
-    /*
-     * this function defers the database name from the sql statement
+    /**
+     * @param $type
+     * @param $sql
+     * @return string
+     * @throws Exception
      */
     private function getDatabase($type, $sql): string
     {
@@ -275,8 +325,11 @@ class Transaction
         }
     }
 
-    /*
-     * this function returns an array with all the fields, wich are used in the query
+    /**
+     * @param $type
+     * @param $sql
+     * @return array
+     * @throws Exception
      */
     private function getFields($type, $sql): array
     {
@@ -310,8 +363,8 @@ class Transaction
         }
     }
 
-    /*
-     * this function returns the transaction object as JSON
+    /**
+     * @return string
      */
     public function createTransactionJSON(): string
     {
