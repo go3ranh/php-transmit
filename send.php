@@ -16,7 +16,7 @@ if (count($transactions) == 0){
 }
 
 foreach ($transactions as $transaction) {
-    $result = $tr->sendTransaction($transaction, $token, $url);
+    $result = $tr->sendTransaction($transaction['transaction'], $token, $url);
 
     if ($result == 'success') {
         $tr->markAsSent($transaction['id']);

@@ -239,7 +239,7 @@ class Transaction
     {
         $submit = array();
         $submit['token'] = $token;
-        $submit['transactions'] = $transaction['transaction'];
+        $submit['transactions'] = $transaction;
 
 
         //url-ify the data for the POST
@@ -287,7 +287,6 @@ class Transaction
         $final['data']['fields'] = $fields;
         $final['data']['values'] = $values;
 
-        //TODO implement where with database names, not just fields (for example with nested arrays, first beeing database, second fieldname)
         if (strpos($sql, "WHERE") !== false) {
             if (count($whereFields) != 0 and count($whereValues) != 0) {
                 if (count($whereFields) == count($whereValues))
@@ -374,8 +373,6 @@ class Transaction
                     $parts[$i] = str_replace('`', '', $parts[$i]);
                 return $parts;
             case 'UPDATE':
-                //TODO implement updating
-                //UPDATE `produkte` SET `bezeichnung` = 'Aprikose ' WHERE `produkte`.`barcode` = 6;
                 $parts = explode('WHERE', $sql);
                 $parts = explode('SET', $parts[0]);
                 $parts = explode('=', $parts[1]);
