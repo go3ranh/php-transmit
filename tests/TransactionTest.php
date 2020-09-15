@@ -28,7 +28,7 @@ class TransactionTest extends TestCase
 
     }
 
-    public function testAddTransation()
+    public function testAddTransaction()
     {
 
     }
