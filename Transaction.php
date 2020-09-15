@@ -74,7 +74,12 @@ class Transaction
                     $stmt = $pdo->prepare($sql);
 
                     for ($i = 1; $i <= sizeof($data['values']); $i++) {
-                        $stmt->bindParam($i, $data['values'][$i - 1]);
+                        if ($data['values'] == '$$last-insert-id$$'){
+                            $bind = $this->getLastInsertID($pdo);
+                            $stmt->bindParam($i, $bind);
+                        }else {
+                            $stmt->bindParam($i, $data['values'][$i - 1]);
+                        }
                     }
 
                     if (!$stmt->execute()) {
@@ -102,6 +107,7 @@ class Transaction
                     }
 
                     $stmt = $pdo->prepare($sql);
+                    //todo implement last insert id
                     for ($i = 0; $i < count($data['fields']) + count($data['where']['fields']); $i++) {
                         if ($i < count($data['fields'])) {
                             $stmt->bindParam($i + 1, $data['values'][$i]);
@@ -149,6 +155,15 @@ class Transaction
             return false;
         }
         return true;
+    }
+
+    //todo substitute database names for shared hosting
+    public function substituteDatabaseName($from, $to){
+
+    }
+
+    public function getLastInsertID($pdo):int{
+        return $pdo->lastInsertId();
     }
 
     public function sendTransaction($transaction, $token, $url): string
