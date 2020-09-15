@@ -240,7 +240,7 @@ class Transaction
      * @param array $whereValues
      * @throws Exception
      */
-    public function addTransation($sql, $values, $whereFields = array(), $whereValues = array())
+    public function addTransaction($sql, $values, $whereFields = array(), $whereValues = array())
     {
         $type = explode(' ', $sql)[0];
         $fields = $this->getFields($type, $sql);
