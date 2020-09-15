@@ -144,28 +144,28 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-386482099"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1973498983"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-386482099" class="accordion-body collapse in">
+            <div id="namespace-1973498983" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-932401752"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1626633756"></a>
                                 <a href="../namespaces/goeranh.html" style="margin-left: 30px; padding-left: 0">goeranh</a>
             </div>
-            <div id="namespace-932401752" class="accordion-body collapse ">
+            <div id="namespace-1626633756" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1703663163"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1069132061"></a>
                                 <a href="../namespaces/goeranh.Transmit.html" style="margin-left: 30px; padding-left: 0">Transmit</a>
             </div>
-            <div id="namespace-1703663163" class="accordion-body collapse ">
+            <div id="namespace-1069132061" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -315,13 +315,13 @@ it can currently parse SQL INSERT and UPDATE statements</em></p>
             <a id="property_transactionArray" name="property_transactionArray" class="anchor"></a>
             <article class="property">
                 <h3 class="private ">$transactionArray</h3>
-                <pre class="signature">$transactionArray : </pre>
+                <pre class="signature">$transactionArray : array</pre>
                 <p><em></em></p>
                 
 
                                 <h4>Type</h4>
-                
-                &mdash; Array Array soring all added transactions                            </article>
+                array
+                &mdash; Array soring all added transactions                            </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -339,13 +339,13 @@ it can currently parse SQL INSERT and UPDATE statements</em></p>
             <a id="property_errorMessage" name="property_errorMessage" class="anchor"></a>
             <article class="property">
                 <h3 class="private ">$errorMessage</h3>
-                <pre class="signature">$errorMessage : </pre>
+                <pre class="signature">$errorMessage : String</pre>
                 <p><em></em></p>
                 
 
                                 <h4>Type</h4>
-                
-                &mdash; String string storing all errormessages occured in the life of this object                            </article>
+                String
+                &mdash; string storing all errormessages occured in the life of this object                            </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -363,13 +363,13 @@ it can currently parse SQL INSERT and UPDATE statements</em></p>
             <a id="property_transactionError" name="property_transactionError" class="anchor"></a>
             <article class="property">
                 <h3 class="private ">$transactionError</h3>
-                <pre class="signature">$transactionError : </pre>
+                <pre class="signature">$transactionError : integer</pre>
                 <p><em></em></p>
                 
 
                                 <h4>Type</h4>
-                
-                &mdash; int indicates wether or not any errors have occured                            </article>
+                integer
+                &mdash; indicates wether or not any errors have occured                            </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -387,13 +387,13 @@ it can currently parse SQL INSERT and UPDATE statements</em></p>
             <a id="property_replaceDBName" name="property_replaceDBName" class="anchor"></a>
             <article class="property">
                 <h3 class="private ">$replaceDBName</h3>
-                <pre class="signature">$replaceDBName : </pre>
+                <pre class="signature">$replaceDBName : array</pre>
                 <p><em></em></p>
                 
 
                                 <h4>Type</h4>
-                
-                &mdash; array sores which database name should be changed to what other name                            </article>
+                array
+                &mdash; sores which database name should be changed to what other name                            </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -411,13 +411,13 @@ it can currently parse SQL INSERT and UPDATE statements</em></p>
             <a id="property_pdo" name="property_pdo" class="anchor"></a>
             <article class="property">
                 <h3 class="private ">$pdo</h3>
-                <pre class="signature">$pdo : </pre>
+                <pre class="signature">$pdo : \PDO</pre>
                 <p><em></em></p>
                 
 
                                 <h4>Type</h4>
-                
-                &mdash; PDO the PDO database connection                            </article>
+                \PDO
+                &mdash; the PDO database connection                            </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -443,16 +443,16 @@ it can currently parse SQL INSERT and UPDATE statements</em></p>
             <article class="method">
                 <h3 class="public ">__construct()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">__construct(  <span class="argument">$pdo</span>) </pre>
+                <pre class="signature" style="margin-right: 54px;">__construct(\PDO  <span class="argument">$pdo</span>) </pre>
                 <p><em>pass database object via dependency injection - todo remove unneccecary function parameters</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td></td>
+                                <td>\PDO</td>
                                 <td>$pdo </td>
-                                <td><p>PDO</p></td>
+                                <td><p>PDO database connection</p></td>
                             </tr>
                                             </table>
                 
@@ -514,21 +514,21 @@ it can currently parse SQL INSERT and UPDATE statements</em></p>
             <article class="method">
                 <h3 class="public ">runTransaction()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">runTransaction(  <span class="argument">$json</span>,   <span class="argument">$mysqli</span>) : boolean</pre>
+                <pre class="signature" style="margin-right: 54px;">runTransaction(String  <span class="argument">$json</span>, \mysqli  <span class="argument">$mysqli</span>) : boolean</pre>
                 <p><em>this function takes a transaction json, decodes it and performs the actions in it</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td></td>
+                                <td>String</td>
                                 <td>$json </td>
-                                <td><p>String</p></td>
+                                <td><p>JSON String containing the transaction array</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>\mysqli</td>
                                 <td>$mysqli </td>
-                                <td><p>mysqli</p></td>
+                                <td><p>mysqli connection for real_escape_string</p></td>
                             </tr>
                                             </table>
                 
@@ -691,21 +691,21 @@ it can currently parse SQL INSERT and UPDATE statements</em></p>
             <article class="method">
                 <h3 class="public ">substituteDatabaseName()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">substituteDatabaseName(  <span class="argument">$from</span>,   <span class="argument">$to</span>) </pre>
+                <pre class="signature" style="margin-right: 54px;">substituteDatabaseName(String  <span class="argument">$from</span>, String  <span class="argument">$to</span>) </pre>
                 <p><em>set a database name, that needs to be changed on the server</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td></td>
+                                <td>String</td>
                                 <td>$from </td>
-                                <td><p>String</p></td>
+                                <td><p>the original database name on the sending machine</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>String</td>
                                 <td>$to </td>
-                                <td><p>String</p></td>
+                                <td><p>the database name to be inserted instead</p></td>
                             </tr>
                                             </table>
                 
@@ -732,26 +732,26 @@ it can currently parse SQL INSERT and UPDATE statements</em></p>
             <article class="method">
                 <h3 class="public ">sendTransaction()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">sendTransaction(  <span class="argument">$transaction</span>,   <span class="argument">$token</span>,   <span class="argument">$url</span>) : string</pre>
+                <pre class="signature" style="margin-right: 54px;">sendTransaction(String  <span class="argument">$transaction</span>, String  <span class="argument">$token</span>, String  <span class="argument">$url</span>) : string</pre>
                 <p><em>use curl to send transaction json to server</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td></td>
+                                <td>String</td>
                                 <td>$transaction </td>
-                                <td><p>String / JSON</p></td>
+                                <td><p>the json string containing the transaction instructions</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>String</td>
                                 <td>$token </td>
-                                <td><p>String</p></td>
+                                <td><p>the token, both parties have agreed upon</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>String</td>
                                 <td>$url </td>
-                                <td><p>String</p></td>
+                                <td><p>The complete url to the location of the receiving script</p></td>
                             </tr>
                                             </table>
                 
@@ -780,21 +780,21 @@ it can currently parse SQL INSERT and UPDATE statements</em></p>
             <article class="method">
                 <h3 class="public ">addTransaction()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">addTransaction(  <span class="argument">$sql</span>,   <span class="argument">$values</span>, array  <span class="argument">$whereFields = array()</span>, array  <span class="argument">$whereValues = array()</span>) </pre>
+                <pre class="signature" style="margin-right: 54px;">addTransaction(String  <span class="argument">$sql</span>, String  <span class="argument">$values</span>, array  <span class="argument">$whereFields = array()</span>, array  <span class="argument">$whereValues = array()</span>) </pre>
                 <p><em>add another transaction to the transaction array - this can be executed once, or as many times as u need, in case you rely on some compound queries</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td></td>
+                                <td>String</td>
                                 <td>$sql </td>
-                                <td><p>String</p></td>
+                                <td><p>SQL statement to be parsed</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>String</td>
                                 <td>$values </td>
-                                <td><p>array</p></td>
+                                <td><p>values to be bound</p></td>
                             </tr>
                                                     <tr>
                                 <td>array</td>
@@ -896,21 +896,21 @@ it can currently parse SQL INSERT and UPDATE statements</em></p>
             <article class="method">
                 <h3 class="private ">getTable()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getTable(  <span class="argument">$type</span>,   <span class="argument">$sql</span>) : string</pre>
+                <pre class="signature" style="margin-right: 54px;">getTable(String  <span class="argument">$type</span>, String  <span class="argument">$sql</span>) : string</pre>
                 <p><em>extracts the table name from the sql statement</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td></td>
+                                <td>String</td>
                                 <td>$type </td>
-                                <td><p>String</p></td>
+                                <td><p>the sql method (INSERT / UPDATE)</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>String</td>
                                 <td>$sql </td>
-                                <td><p>String</p></td>
+                                <td><p>The sql statement</p></td>
                             </tr>
                                             </table>
                 
@@ -944,21 +944,21 @@ it can currently parse SQL INSERT and UPDATE statements</em></p>
             <article class="method">
                 <h3 class="private ">getDatabase()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getDatabase(  <span class="argument">$type</span>,   <span class="argument">$sql</span>) : string</pre>
+                <pre class="signature" style="margin-right: 54px;">getDatabase(String  <span class="argument">$type</span>, String  <span class="argument">$sql</span>) : string</pre>
                 <p><em>extracts the database name from the sql statement</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td></td>
+                                <td>String</td>
                                 <td>$type </td>
-                                <td><p>String</p></td>
+                                <td><p>the sql method (INSERT / UPDATE)</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>String</td>
                                 <td>$sql </td>
-                                <td><p>String</p></td>
+                                <td><p>The sql statement</p></td>
                             </tr>
                                             </table>
                 
@@ -992,21 +992,21 @@ it can currently parse SQL INSERT and UPDATE statements</em></p>
             <article class="method">
                 <h3 class="private ">getFields()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getFields(  <span class="argument">$type</span>,   <span class="argument">$sql</span>) : array</pre>
+                <pre class="signature" style="margin-right: 54px;">getFields(String  <span class="argument">$type</span>, String  <span class="argument">$sql</span>) : array</pre>
                 <p><em>extracts the fields from the sql statement</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td></td>
+                                <td>String</td>
                                 <td>$type </td>
-                                <td><p>String</p></td>
+                                <td><p>the sql method (INSERT / UPDATE)</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>String</td>
                                 <td>$sql </td>
-                                <td><p>String</p></td>
+                                <td><p>The sql statement</p></td>
                             </tr>
                                             </table>
                 
@@ -1084,7 +1084,7 @@ it can currently parse SQL INSERT and UPDATE statements</em></p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on September 15th, 2020 at 08:56.
+                    on September 15th, 2020 at 09:07.
                 </section>
             </section>
         </section>

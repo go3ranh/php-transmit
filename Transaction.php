@@ -6,6 +6,7 @@
 namespace goeranh\Transmit;
 
 use Exception;
+use mysqli;
 use PDO;
 
 /**
@@ -15,29 +16,29 @@ use PDO;
 class Transaction
 {
     /**
-     * @var $transactionArray Array Array soring all added transactions
+     * @var array $transactionArray Array soring all added transactions
      */
     private $transactionArray = array();
     /**
-     * @var $errorMessage String string storing all errormessages occured in the life of this object
+     * @var String $errorMessage  string storing all errormessages occured in the life of this object
      */
     private $errorMessage = '';
     /**
-     * @var $transactionError int indicates wether or not any errors have occured
+     * @var int $transactionError indicates wether or not any errors have occured
      */
     private $transactionError = 0;
     /**
-     * @var $replaceDBName array sores which database name should be changed to what other name
+     * @var array $replaceDBName sores which database name should be changed to what other name
      */
     private $replaceDBName = array();
     /**
-     * @var $pdo PDO the PDO database connection
+     * @var PDO $pdo the PDO database connection
      */
     private $pdo;
 
     /**
      * pass database object via dependency injection - todo remove unneccecary function parameters
-     * @param $pdo PDO
+     * @param PDO $pdo PDO database connection
      */
     public function __construct($pdo)
     {
@@ -67,8 +68,8 @@ class Transaction
 
     /**
      * this function takes a transaction json, decodes it and performs the actions in it
-     * @param $json String
-     * @param $mysqli mysqli
+     * @param String $json JSON String containing the transaction array
+     * @param mysqli $mysqli mysqli connection for real_escape_string
      * @return bool
      * @throws Exception
      */
@@ -107,7 +108,7 @@ class Transaction
 
                     for ($i = 1; $i <= sizeof($data['values']); $i++) {
                         if ($data['values'] == '$$last-insert-id$$') {
-                            $bind = $this->getLastInsertID($pdo);
+                            $bind = $this->getLastInsertID();
                             $stmt->bindParam($i, $bind);
                         } else {
                             $stmt->bindParam($i, $data['values'][$i - 1]);
@@ -210,8 +211,8 @@ class Transaction
 
     /**
      * set a database name, that needs to be changed on the server
-     * @param $from String
-     * @param $to String
+     * @param String $from the original database name on the sending machine
+     * @param String $to the database name to be inserted instead
      */
     public function substituteDatabaseName($from, $to)
     {
@@ -229,9 +230,9 @@ class Transaction
 
     /**
      * use curl to send transaction json to server
-     * @param $transaction String / JSON
-     * @param $token String
-     * @param $url String
+     * @param String $transaction the json string containing the transaction instructions
+     * @param String $token the token, both parties have agreed upon
+     * @param String $url The complete url to the location of the receiving script
      * @return string
      */
     public function sendTransaction($transaction, $token, $url): string
@@ -261,8 +262,8 @@ class Transaction
 
     /**
      * add another transaction to the transaction array - this can be executed once, or as many times as u need, in case you rely on some compound queries
-     * @param $sql String
-     * @param $values array
+     * @param String $sql SQL statement to be parsed
+     * @param String $values values to be bound
      * @param array $whereFields
      * @param array $whereValues
      * @throws Exception
@@ -302,8 +303,8 @@ class Transaction
 
     /**
      * extracts the table name from the sql statement
-     * @param $type String
-     * @param $sql String
+     * @param String $type the sql method (INSERT / UPDATE)
+     * @param String $sql The sql statement
      * @return string
      * @throws Exception
      */
@@ -329,8 +330,8 @@ class Transaction
 
     /**
      * extracts the database name from the sql statement
-     * @param $type String
-     * @param $sql String
+     * @param String $type the sql method (INSERT / UPDATE)
+     * @param String $sql The sql statement
      * @return string
      * @throws Exception
      */
@@ -356,8 +357,8 @@ class Transaction
 
     /**
      * extracts the fields from the sql statement
-     * @param $type String
-     * @param $sql String
+     * @param String $type the sql method (INSERT / UPDATE)
+     * @param String $sql The sql statement
      * @return array
      * @throws Exception
      */
