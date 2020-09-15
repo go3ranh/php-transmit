@@ -1,4 +1,7 @@
 <?php
+/**
+ * this file contains the transaction class
+ */
 
 namespace goeranh\Transmit;
 
@@ -11,10 +14,25 @@ use PDO;
  */
 class Transaction
 {
+    /**
+     * @var $transactionArray Array Array soring all added transactions
+     */
     private $transactionArray = array();
+    /**
+     * @var $errorMessage String string storing all errormessages occured in the life of this object
+     */
     private $errorMessage = '';
+    /**
+     * @var $transactionError int indicates wether or not any errors have occured
+     */
     private $transactionError = 0;
+    /**
+     * @var $replaceDBName array sores which database name should be changed to what other name
+     */
     private $replaceDBName = array();
+    /**
+     * @var $pdo PDO the PDO database connection
+     */
     private $pdo;
 
     /**
