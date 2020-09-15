@@ -17,3 +17,10 @@ if(isset($_POST['token']) and isset($_POST['transactions'])){
 }else{
     echo 'you either did not submit a token, or a transaction';
 }
+
+//return the servers transactions
+if (isset($_POST['token']) and isset($_POST['get'])){
+    $transaction = new \goeranh\Transmit\Transaction();
+    $transactions = $transaction->getPendingTransactions($pdo);
+    //todo figure out how to transmit these
+}
