@@ -19,23 +19,23 @@ class Transaction
 
     /**
      * pass database object via dependency injection - todo remove unneccecary function parameters
-     * @param $pdo
+     * @param $pdo PDO
      */
-    public function Transaction($pdo){
+    public function Transaction($pdo)
+    {
         $this->pdo = $pdo;
     }
 
     /**
      * this function converts the transaction array to json and writes it into its database as pending
-     * @param $pdo
      * @return bool
      * @throws Exception
      */
-    public function commit($pdo): bool
+    public function commit(): bool
     {
         if ($this->transactionArray != array()) {
             $json = $this->createTransactionJSON();
-            $stmt = $pdo->prepare("INSERT INTO transactions(transaction) VALUES (?)");
+            $stmt = $this->pdo->prepare("INSERT INTO transactions(transaction) VALUES (?)");
             $stmt->bindParam(1, $json);
             if ($stmt->execute()) {
                 return true;
@@ -49,13 +49,12 @@ class Transaction
 
     /**
      * this function takes a transaction json, decodes it and performs the actions in it
-     * @param $json
-     * @param $pdo
-     * @param $mysqli
+     * @param $json String
+     * @param $mysqli mysqli
      * @return bool
      * @throws Exception
      */
-    public function runTransaction($json, $pdo, $mysqli): bool
+    public function runTransaction($json, $mysqli): bool
     {
         //decode as array, not object
         $this->transactionArray = json_decode($json, 1);
@@ -63,9 +62,9 @@ class Transaction
             $data = $transaction['data'];
             switch ($transaction['action']) {
                 case 'insert':
-                    if ($this->replaceDBName != array()){
+                    if ($this->replaceDBName != array()) {
                         $database = str_replace($this->replaceDBName['from'], $this->replaceDBName['to'], $data['database-name']) . '.' . $data['table-name'];
-                    }else{
+                    } else {
                         $database = $data['database-name'] . '.' . $data['table-name'];
                     }
                     $sql = "INSERT INTO " . $mysqli->real_escape_string($database) . "(";
@@ -89,10 +88,10 @@ class Transaction
                     $stmt = $pdo->prepare($sql);
 
                     for ($i = 1; $i <= sizeof($data['values']); $i++) {
-                        if ($data['values'] == '$$last-insert-id$$'){
+                        if ($data['values'] == '$$last-insert-id$$') {
                             $bind = $this->getLastInsertID($pdo);
                             $stmt->bindParam($i, $bind);
-                        }else {
+                        } else {
                             $stmt->bindParam($i, $data['values'][$i - 1]);
                         }
                     }
@@ -164,26 +163,24 @@ class Transaction
 
     /**
      * returns all pending transactions from the database
-     * @param $pdo
-     * @return array
+     * @return array PDO::ASSOC
      */
-    public function getPendingTransactions($pdo): array
+    public function getPendingTransactions(): array
     {
-        $stmt = $pdo->query("SELECT id, transaction FROM transactions WHERE bearbeitet=0");
+        $stmt = $this->pdo->query("SELECT id, transaction FROM transactions WHERE bearbeitet=0");
         $return = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $return;
     }
 
     /**
      * updates any given transaction as sent
-     * @param $id
-     * @param $pdo
+     * @param $id int
      * @return bool
      */
-    public function markAsSent($id, $pdo): bool
+    public function markAsSent($id): bool
     {
         $sql = "UPDATE shop.transactions SET bearbeitet=1 WHERE id=?";
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(1, $id);
         if (!$stmt->execute()) {
             return false;
@@ -195,27 +192,28 @@ class Transaction
 
     /**
      * set a database name, that needs to be changed on the server
-     * @param $from
-     * @param $to
+     * @param $from String
+     * @param $to String
      */
-    public function substituteDatabaseName($from, $to){
+    public function substituteDatabaseName($from, $to)
+    {
         $this->replaceDBName = array('from' => $from, 'to' => $to);
     }
 
     /**
      * returns the pdo last insert id
-     * @param $pdo
      * @return int
      */
-    private function getLastInsertID():int{
+    private function getLastInsertID(): int
+    {
         return $this->pdo->lastInsertId();
     }
 
     /**
      * use curl to send transaction json to server
-     * @param $transaction
-     * @param $token
-     * @param $url
+     * @param $transaction String / JSON
+     * @param $token String
+     * @param $url String
      * @return string
      */
     public function sendTransaction($transaction, $token, $url): string
@@ -245,8 +243,8 @@ class Transaction
 
     /**
      * add another transaction to the transaction array - this can be executed once, or as many times as u need, in case you rely on some compound queries
-     * @param $sql
-     * @param $values
+     * @param $sql String
+     * @param $values array
      * @param array $whereFields
      * @param array $whereValues
      * @throws Exception
@@ -286,8 +284,8 @@ class Transaction
 
     /**
      * extracts the table name from the sql statement
-     * @param $type
-     * @param $sql
+     * @param $type String
+     * @param $sql String
      * @return string
      * @throws Exception
      */
@@ -313,8 +311,8 @@ class Transaction
 
     /**
      * extracts the database name from the sql statement
-     * @param $type
-     * @param $sql
+     * @param $type String
+     * @param $sql String
      * @return string
      * @throws Exception
      */
@@ -340,8 +338,8 @@ class Transaction
 
     /**
      * extracts the fields from the sql statement
-     * @param $type
-     * @param $sql
+     * @param $type String
+     * @param $sql String
      * @return array
      * @throws Exception
      */
