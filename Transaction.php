@@ -18,6 +18,7 @@ class Transaction
     private $transactionArray = array();
     private $errorMessage = '';
     private $transactionError = 0;
+    private $replaceDBName = array();
 
     /*
      * commit the created transaction to the database
@@ -45,10 +46,6 @@ class Transaction
         }
     }
 
-    /*
-     * this function currently requires a mysqli database connection, wich is only used to run the real_escape_string function
-     * the actual queries are run as pdo prepared statements
-     */
     /**
      * @param $json
      * @param $pdo
@@ -64,7 +61,11 @@ class Transaction
             $data = $transaction['data'];
             switch ($transaction['action']) {
                 case 'insert':
-                    $database = $data['database-name'] . '.' . $data['table-name'];
+                    if ($this->replaceDBName != array()){
+                        $database = str_replace($this->replaceDBName['from'], $this->replaceDBName['to'], $data['database-name']) . '.' . $data['table-name'];
+                    }else{
+                        $database = $data['database-name'] . '.' . $data['table-name'];
+                    }
                     $sql = "INSERT INTO " . $mysqli->real_escape_string($database) . "(";
                     for ($i = 0; $i < sizeof($data['fields']); $i++) {
                         if ($i == 0) {
@@ -191,7 +192,7 @@ class Transaction
      * @param $to
      */
     public function substituteDatabaseName($from, $to){
-
+        $this->replaceDBName = array('from' => $from, 'to' => $to);
     }
 
     /**
