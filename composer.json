@@ -9,5 +9,15 @@
             "email": "goeran@karsdorf.net"
         }
     ],
-    "require": {}
+    "autoload": {
+        "classmap": [
+            "."
+        ]
+    },
+    "require": {
+        "phpdocumentor/phpdocumentor": "^2.9"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    }
 }
