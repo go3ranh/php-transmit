@@ -1,31 +1,32 @@
 <?php
 
-/*
- * this class is meant for creating transactions to be synced to another mysql server
- * it can currently parse SQL INSERT and UPDATE statements
- */
-
 namespace goeranh\Transmit;
 
 use Exception;
 use PDO;
 
+/**
+ * this class is meant for creating transactions to be synced to another mysql server
+ * it can currently parse SQL INSERT and UPDATE statements
+ */
 class Transaction
 {
-    /*
-     * start off with an empty transaction
-     */
     private $transactionArray = array();
     private $errorMessage = '';
     private $transactionError = 0;
     private $replaceDBName = array();
+    private $pdo;
 
-    /*
-     * commit the created transaction to the database
-     * expects to be given the database connection object
-     * returns either true or false, depending on the success of the write to the database
-     */
     /**
+     * pass database object via dependency injection - todo remove unneccecary function parameters
+     * @param $pdo
+     */
+    public function Transaction($pdo){
+        $this->pdo = $pdo;
+    }
+
+    /**
+     * this function converts the transaction array to json and writes it into its database as pending
      * @param $pdo
      * @return bool
      * @throws Exception
@@ -47,6 +48,7 @@ class Transaction
     }
 
     /**
+     * this function takes a transaction json, decodes it and performs the actions in it
      * @param $json
      * @param $pdo
      * @param $mysqli
@@ -143,6 +145,7 @@ class Transaction
     }
 
     /**
+     * this function returns all the combined error mssages that occured in the life ot the transaction object
      * @return string
      */
     public function getErrorMessages(): string
@@ -151,6 +154,7 @@ class Transaction
     }
 
     /**
+     * returns wether or not any errors have occured yet
      * @return int
      */
     public function getErrorCode(): int
@@ -159,6 +163,7 @@ class Transaction
     }
 
     /**
+     * returns all pending transactions from the database
      * @param $pdo
      * @return array
      */
@@ -170,6 +175,7 @@ class Transaction
     }
 
     /**
+     * updates any given transaction as sent
      * @param $id
      * @param $pdo
      * @return bool
@@ -188,6 +194,7 @@ class Transaction
     //todo substitute database names for shared hosting
 
     /**
+     * set a database name, that needs to be changed on the server
      * @param $from
      * @param $to
      */
@@ -196,14 +203,16 @@ class Transaction
     }
 
     /**
+     * returns the pdo last insert id
      * @param $pdo
      * @return int
      */
-    public function getLastInsertID($pdo):int{
-        return $pdo->lastInsertId();
+    private function getLastInsertID():int{
+        return $this->pdo->lastInsertId();
     }
 
     /**
+     * use curl to send transaction json to server
      * @param $transaction
      * @param $token
      * @param $url
@@ -235,6 +244,7 @@ class Transaction
     }
 
     /**
+     * add another transaction to the transaction array - this can be executed once, or as many times as u need, in case you rely on some compound queries
      * @param $sql
      * @param $values
      * @param array $whereFields
@@ -275,6 +285,7 @@ class Transaction
     }
 
     /**
+     * extracts the table name from the sql statement
      * @param $type
      * @param $sql
      * @return string
@@ -301,6 +312,7 @@ class Transaction
     }
 
     /**
+     * extracts the database name from the sql statement
      * @param $type
      * @param $sql
      * @return string
@@ -327,6 +339,7 @@ class Transaction
     }
 
     /**
+     * extracts the fields from the sql statement
      * @param $type
      * @param $sql
      * @return array
@@ -365,6 +378,7 @@ class Transaction
     }
 
     /**
+     * converts the transaction array to json
      * @return string
      */
     public function createTransactionJSON(): string
