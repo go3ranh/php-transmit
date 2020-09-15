@@ -20,7 +20,7 @@ if(isset($_POST['token']) and isset($_POST['transactions'])){
 
 //return the servers transactions
 if (isset($_POST['token']) and isset($_POST['get'])){
-    $transaction = new \goeranh\Transmit\Transaction();
-    $transactions = $transaction->getPendingTransactions($pdo);
+    $transaction = new \goeranh\Transmit\Transaction($pdo);
+    $transactions = $transaction->getPendingTransactions();
     //todo figure out how to transmit these
 }

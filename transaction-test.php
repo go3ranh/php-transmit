@@ -23,9 +23,9 @@ $stmt->bindParam(3, $uid, PDO::PARAM_INT, 11);
 $stmt->bindParam(4, $ip);
 //$stmt->execute();
 
-$transaction = new \goeranh\Transmit\Transaction();
+$transaction = new \goeranh\Transmit\Transaction($pdo);
 $transaction->addTransation($sql, array($aprikose, $hersteller), array('barcode'), array('6'));
-$transaction->commit($pdo);
+$transaction->commit();
 
 //$mysqli = new mysqli($dbhost,$dbuser, $dbpass, $dbname);
 //$transaction->runTransaction($transaction->createTransactionJSON(), $pdo, $mysqli);

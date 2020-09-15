@@ -21,7 +21,7 @@ class Transaction
      * pass database object via dependency injection - todo remove unneccecary function parameters
      * @param $pdo PDO
      */
-    public function Transaction($pdo)
+    public function __construct($pdo)
     {
         $this->pdo = $pdo;
     }
