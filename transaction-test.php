@@ -24,7 +24,7 @@ $stmt->bindParam(4, $ip);
 //$stmt->execute();
 
 $transaction = new \goeranh\Transmit\Transaction($pdo);
-$transaction->addTransation($sql, array($aprikose, $hersteller), array('barcode'), array('6'));
+$transaction->addTransaction($sql, array($aprikose, $hersteller), array('barcode'), array('6'));
 $transaction->commit();
 
 //$mysqli = new mysqli($dbhost,$dbuser, $dbpass, $dbname);

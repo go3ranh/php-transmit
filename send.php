@@ -1,4 +1,7 @@
 <?php
+/**
+ * file to send pending transactions from one server to another as specified in config.php
+ */
 include "Transaction.php";
 
 use goeranh\Transmit\Transaction;
@@ -17,7 +20,6 @@ if (count($transactions) == 0){
 
 foreach ($transactions as $transaction) {
     $result = $tr->sendTransaction($transaction['transaction'], $token, $url);
-
     if ($result == 'success') {
         $tr->markAsSent($transaction['id']);
     } else {

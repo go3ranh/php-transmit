@@ -1,13 +1,22 @@
 <?php
+
+/**
+ * file for receiving transactions sent by a script like send.php
+ */
+
+/**
+ * @author Göran Heinemann
+ */
+
 include "Transaction.php";
-include "../../config/db.php";
 include "../../config/config.php";
+include "../../config/db.php";
 include 'config.php';
 
 if(isset($_POST['token']) and isset($_POST['transactions'])){
     if ($_POST['token'] == $token){
-        $transaction = new \goeranh\Transmit\Transaction();
-        $result = $transaction->runTransaction($_POST['transactions'], $pdo, $mysqli);
+        $transaction = new \goeranh\Transmit\Transaction($pdo);
+        $result = $transaction->runTransaction($_POST['transactions'], $mysqli);
         if ($result == 0){
             echo 'success';
         }else{
