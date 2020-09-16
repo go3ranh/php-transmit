@@ -37,6 +37,11 @@ class Transaction
     private $pdo;
 
     /**
+     * @var int $lastInsertId
+     */
+    private $lastInsertId = null;
+
+    /**
      * pass database object via dependency injection - todo remove unneccecary function parameters
      * @param PDO $pdo PDO database connection
      */
@@ -103,11 +108,12 @@ class Transaction
                         }
                     }
                     $sql .= ")";
+                    var_dump($sql);
 
-                    $stmt = $pdo->prepare($sql);
+                    $stmt = $this->pdo->prepare($sql);
 
                     for ($i = 1; $i <= sizeof($data['values']); $i++) {
-                        if ($data['values'] == '$$last-insert-id$$') {
+                        if ($data['values'][$i-1] == '$$last-insert-id$$') {
                             $bind = $this->getLastInsertID();
                             $stmt->bindParam($i, $bind);
                         } else {
@@ -117,7 +123,7 @@ class Transaction
 
                     if (!$stmt->execute()) {
                         $this->transactionError = 1;
-                        $this->errorMessage .= $stmt->errorInfo() . ' ';
+                        $this->errorMessage .= implode(' ', $stmt->errorInfo()) . ' ';
                     }
                     break;
                 case 'update':
@@ -150,7 +156,7 @@ class Transaction
                     }
                     if (!$stmt->execute()) {
                         $this->transactionError = 1;
-                        $this->errorMessage .= $stmt->errorInfo() . '.';
+                        $this->errorMessage .= implode(' ', $stmt->errorInfo()) . '.';
                     }
                     break;
                 default:
@@ -223,9 +229,12 @@ class Transaction
      * returns the pdo last insert id
      * @return int
      */
-    private function getLastInsertID(): int
+    public function getLastInsertID(): int
     {
-        return $this->pdo->lastInsertId();
+        if ($this->lastInsertId == null){
+            $this->lastInsertId = $this->pdo->lastInsertId();
+        }
+        return $this->lastInsertId;
     }
 
     /**
@@ -263,7 +272,7 @@ class Transaction
     /**
      * add another transaction to the transaction array - this can be executed once, or as many times as u need, in case you rely on some compound queries
      * @param String $sql SQL statement to be parsed
-     * @param String $values values to be bound
+     * @param array $values values to be bound
      * @param array $whereFields
      * @param array $whereValues
      * @throws Exception
@@ -293,6 +302,8 @@ class Transaction
                     $final['data']['where']['fields'] = $whereFields;
                 $final['data']['where']['values'] = $whereValues;
             } else {
+                $this->errorMessage .= 'The number of fields for your where clause does not match the number of values you gave. ';
+                $this->transactionError = 1;
                 throw new Exception('The number of fields for your where clause does not match the number of values you gave');
             }
         }
