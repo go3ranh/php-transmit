@@ -1,6 +1,5 @@
 <?php
-include "../../config/config.php";
-include "../../config/db.php";
+include "config.php";
 include "../helper.php";
 include "Transaction.php";
 

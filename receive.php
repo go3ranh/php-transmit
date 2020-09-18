@@ -9,8 +9,6 @@
  */
 
 include "Transaction.php";
-include "../../config/config.php";
-include "../../config/db.php";
 include 'config.php';
 
 if(isset($_POST['token']) and isset($_POST['transactions'])){

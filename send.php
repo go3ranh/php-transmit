@@ -5,9 +5,6 @@
 include "Transaction.php";
 
 use goeranh\Transmit\Transaction;
-
-include "../../config/config.php";
-include "../../config/db.php";
 include 'config.php';
 
 $tr = new Transaction($pdo);
