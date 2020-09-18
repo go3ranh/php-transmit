@@ -20,6 +20,8 @@ if(isset($_POST['token']) and isset($_POST['transactions'])){
         }else{
             echo $transaction->getErrorMessages();
         }
+    }else{
+        echo 'Wrong token';
     }
 }else{
     echo 'you either did not submit a token, or a transaction';
