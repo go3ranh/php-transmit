@@ -108,7 +108,6 @@ class Transaction
                         }
                     }
                     $sql .= ")";
-                    var_dump($sql);
 
                     $stmt = $this->pdo->prepare($sql);
 
@@ -145,7 +144,7 @@ class Transaction
                         }
                     }
 
-                    $stmt = $pdo->prepare($sql);
+                    $stmt = $this->pdo->prepare($sql);
                     //todo implement last insert id
                     for ($i = 0; $i < count($data['fields']) + count($data['where']['fields']); $i++) {
                         if ($i < count($data['fields'])) {
