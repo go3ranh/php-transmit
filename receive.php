@@ -27,7 +27,7 @@ if(isset($_POST['token']) and isset($_POST['transactions'])){
     if (isset($_POST['token']) and isset($_POST['get'])){
         $transaction = new \goeranh\Transmit\Transaction($pdo);
         $transactions = $transaction->getPendingTransactions();
-        var_dump($transactions);
+        echo json_encode($transactions);
     }else{
         echo 'you either did not submit a token, or a transaction';
     }
