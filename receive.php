@@ -24,12 +24,11 @@ if(isset($_POST['token']) and isset($_POST['transactions'])){
         echo 'Wrong token';
     }
 }else{
-    echo 'you either did not submit a token, or a transaction';
-}
-
-//return the servers transactions
-if (isset($_POST['token']) and isset($_POST['get'])){
-    $transaction = new \goeranh\Transmit\Transaction($pdo);
-    $transactions = $transaction->getPendingTransactions();
-    //todo figure out how to transmit these
+    if (isset($_POST['token']) and isset($_POST['get'])){
+        $transaction = new \goeranh\Transmit\Transaction($pdo);
+        $transactions = $transaction->getPendingTransactions();
+        var_dump($transaction);
+    }else{
+        echo 'you either did not submit a token, or a transaction';
+    }
 }

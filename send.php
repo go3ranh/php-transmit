@@ -10,11 +10,6 @@ include 'config.php';
 $tr = new Transaction($pdo);
 $transactions = $tr->getPendingTransactions();
 
-if (count($transactions) == 0){
-    echo "nothing to do\n";
-    die();
-}
-
 foreach ($transactions as $transaction) {
     $result = $tr->sendTransaction($transaction['transaction'], $token, $url);
     if ($result == 'success') {
@@ -23,3 +18,6 @@ foreach ($transactions as $transaction) {
         echo $result . "\n";
     }
 }
+
+$tr = new Transaction($pdo);
+var_dump($tr->getTransactions($token, $url));

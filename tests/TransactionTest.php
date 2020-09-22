@@ -18,9 +18,9 @@ class TransactionTest extends TestCase
     {
         $transaction = new Transaction(null);
         $sql = "UPDATE shop.`produkte` SET `bezeichnung` = ? and hersteller = ? WHERE `produkte`.`barcode` = ?;";
-        $transaction->addTransaction($sql, array('', ''), array('barcode'), array(1));
+        $transaction->addTransaction($sql, array('', ''), array(array('barcode')), array(1));
         $test = $transaction->createTransactionJSON();
-        $this->assertEquals('[{"action":"update","data":{"database-name":"shop","table-name":"produkte ","fields":["bezeichnung","hersteller"],"values":["",""],"where":{"fields":["barcode"],"values":[1]}}}]', $transaction->createTransactionJSON());
+        $this->assertEquals('[{"action":"update","data":{"database-name":"shop","table-name":"produkte ","fields":["bezeichnung","hersteller"],"values":["",""],"where":{"fields":[["barcode"]]oje  ,"values":[1]}}}]', $transaction->createTransactionJSON());
     }
 
     public function testGetErrorMessages()

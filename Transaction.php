@@ -20,7 +20,7 @@ class Transaction
      */
     private $transactionArray = array();
     /**
-     * @var String $errorMessage  string storing all errormessages occured in the life of this object
+     * @var String $errorMessage string storing all errormessages occured in the life of this object
      */
     private $errorMessage = '';
     /**
@@ -112,7 +112,7 @@ class Transaction
                     $stmt = $this->pdo->prepare($sql);
 
                     for ($i = 1; $i <= sizeof($data['values']); $i++) {
-                        if ($data['values'][$i-1] == '$$last-insert-id$$') {
+                        if ($data['values'][$i - 1] == '$$last-insert-id$$') {
                             $bind = $this->getLastInsertID();
                             $stmt->bindParam($i, $bind);
                         } else {
@@ -230,7 +230,7 @@ class Transaction
      */
     public function getLastInsertID(): int
     {
-        if ($this->lastInsertId == null){
+        if ($this->lastInsertId == null) {
             $this->lastInsertId = $this->pdo->lastInsertId();
         }
         return $this->lastInsertId;
@@ -248,6 +248,31 @@ class Transaction
         $submit = array();
         $submit['token'] = $token;
         $submit['transactions'] = $transaction;
+
+
+        //url-ify the data for the POST
+        $fields_string = http_build_query($submit);
+
+        //open connection
+        $ch = curl_init();
+
+        //set the url, number of POST vars, POST data
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
+
+        //So that curl_exec returns the contents of the cURL; rather than echoing it
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        //execute post
+        return curl_exec($ch);
+    }
+
+    public function getTransactions($token, $url): String
+    {
+        $submit = array();
+        $submit['token'] = $token;
+        $submit['get'] = true;
 
 
         //url-ify the data for the POST
