@@ -39,3 +39,10 @@ foreach ($data as $transaction){
 
 $tr = new Transaction($pdo);
 $tr->sendReults($results, $token, $url);
+
+if (count($transactions) == 0 and count($results) == 0){
+    echo "nothing was changed\n";
+}else{
+    echo count($transactions) . " transactions were sent to the server\n";
+    echo count($results) . " transactions were received from the server\n";
+}
