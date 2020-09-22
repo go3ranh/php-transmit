@@ -29,6 +29,15 @@ if(isset($_POST['token']) and isset($_POST['transactions'])){
         $transactions = $transaction->getPendingTransactions();
         echo json_encode($transactions);
     }else{
-        echo 'you either did not submit a token, or a transaction';
+        if (isset($_POST['token']) and isset($_POST['results'])){
+            foreach ($_POST['results'] as $result){
+                if ($result['status'] == 'success'){
+                    $transaction = new \goeranh\Transmit\Transaction($pdo);
+                    $transaction->markAsSent($result['id']);
+                }
+            }
+        }else{
+            echo 'you either did not submit a token, or a transaction';
+        }
     }
 }

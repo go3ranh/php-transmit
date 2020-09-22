@@ -78,7 +78,7 @@ class Transaction
      * @return bool
      * @throws Exception
      */
-    public function runTransaction($json, $mysqli): bool
+    public function runTransaction($json, $mysqli): int
     {
         //decode as array, not object
         $this->transactionArray = json_decode($json, 1);
@@ -138,7 +138,11 @@ class Transaction
                     $sql .= " WHERE ";
                     for ($i = 0; $i < count($data['where']['fields']); $i++) {
                         if ($i == 0) {
-                            $sql .= $mysqli->real_escape_string($data['where']['fields'][$i]) . "=?";
+                            if (is_array($data['where']['fields'][$i])){
+                                $sql .= $mysqli->real_escape_string($data['where']['fields'][$i][1])."=?";
+                            }else{
+                                $sql .= $mysqli->real_escape_string($data['where']['fields'][$i]) . "=?";
+                            }
                         } else {
                             $sql .= " and " . $mysqli->real_escape_string($data['where']['fields'][$i]) . "=?";
                         }
@@ -150,7 +154,8 @@ class Transaction
                         if ($i < count($data['fields'])) {
                             $stmt->bindParam($i + 1, $data['values'][$i]);
                         } else {
-                            $stmt->bindParam($i + 1, $data['where']['values'][$i - count($data['fields'])]);
+                            $var = $data['where']['values'][$i - count($data['fields'])];
+                            $stmt->bindParam($i + 1, $var);
                         }
                     }
                     if (!$stmt->execute()) {
@@ -273,6 +278,30 @@ class Transaction
         $submit = array();
         $submit['token'] = $token;
         $submit['get'] = true;
+
+
+        //url-ify the data for the POST
+        $fields_string = http_build_query($submit);
+
+        //open connection
+        $ch = curl_init();
+
+        //set the url, number of POST vars, POST data
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
+
+        //So that curl_exec returns the contents of the cURL; rather than echoing it
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        //execute post
+        return curl_exec($ch);
+    }
+
+    public function sendReults($results, $token, $url){
+        $submit = array();
+        $submit['token'] = $token;
+        $submit['results'] = $results;
 
 
         //url-ify the data for the POST

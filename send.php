@@ -20,6 +20,22 @@ foreach ($transactions as $transaction) {
 }
 
 $tr = new Transaction($pdo);
-$data = $tr->getTransactions($token, $url);
+$data = json_decode($tr->getTransactions($token, $url), 1);
 
-var_dump($data);
+$results = array();
+
+foreach ($data as $transaction){
+    $tr = new Transaction($pdo);
+    $tran = $transaction['transaction'];
+    $result = $tr->runTransaction($tran, $mysqli);
+    if ($result == 1){
+        $status = array('id' => $transaction['id'], 'status' => 'failure');
+        $results[] = $status;
+    }else{
+        $status = array('id' => $transaction['id'], 'status' => 'success');
+        $results[] = $status;
+    }
+}
+
+$tr = new Transaction($pdo);
+$tr->sendReults($results, $token, $url);
