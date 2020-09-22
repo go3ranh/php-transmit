@@ -20,4 +20,6 @@ foreach ($transactions as $transaction) {
 }
 
 $tr = new Transaction($pdo);
-var_dump($tr->getTransactions($token, $url));
+$data = $tr->getTransactions($token, $url);
+
+var_dump($data);
