@@ -1,6 +1,4 @@
 
-[//]: # (Copyright (c) 2020, go3ranh. All rights reserved.)
-
 # php-transmit
 PHP-Scripts/Classes for mirroring database calls onto another server
 
