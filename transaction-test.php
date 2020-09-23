@@ -1,4 +1,8 @@
 <?php
+/*
+ * Copyright (c) 2020, go3ranh
+ * All rights reserved.
+ */
 include "config.php";
 include "../helper.php";
 include "Transaction.php";

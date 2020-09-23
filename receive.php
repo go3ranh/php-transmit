@@ -1,5 +1,8 @@
 <?php
-
+/*
+ * Copyright (c) 2020, go3ranh
+ * All rights reserved.
+ */
 /**
  * file for receiving transactions sent by a script like send.php
  */

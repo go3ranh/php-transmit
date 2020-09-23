@@ -1,4 +1,8 @@
 <?php
+/*
+ * Copyright (c) 2020, go3ranh
+ * All rights reserved.
+ */
 /**
  * file to send pending transactions from one server to another as specified in config.php
  */

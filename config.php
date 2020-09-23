@@ -1,5 +1,8 @@
 <?php
-
+/*
+ * Copyright (c) 2020, go3ranh
+ * All rights reserved.
+ */
 //these are just values for my internal testing - they need to be replaces in prduction
 $server = 'http://192.168.178.42';
 $path = '/lib/transactions/receive.php';

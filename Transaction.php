@@ -1,4 +1,9 @@
 <?php
+/*
+ * Copyright (c) 2020, go3ranh
+ * All rights reserved.
+ */
+
 /**
  * this file contains the transaction class
  */
