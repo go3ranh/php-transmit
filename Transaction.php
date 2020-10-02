@@ -44,10 +44,10 @@ class Transaction
     /**
      * @var int $lastInsertId
      */
-    private $lastInsertId = null;
+    private ?int $lastInsertId = null;
 
     /**
-     * pass database object via dependency injection - todo remove unneccecary function parameters
+     * pass database object via dependency injection
      * @param PDO $pdo PDO database connection
      */
     public function __construct($pdo)
