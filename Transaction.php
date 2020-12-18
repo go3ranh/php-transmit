@@ -168,6 +168,37 @@ class Transaction
                         $this->errorMessage .= implode(' ', $stmt->errorInfo()) . '.';
                     }
                     break;
+
+                case 'delete':
+
+                    $database = $data['database-name'] . '.' . $data['table-name'];
+                    $sql = "DELETE FROM " . $mysqli->real_escape_string($database) . " WHERE ";
+                    for ($i = 0; $i < count($data['where']['fields']); $i++) {
+                        if ($i == 0) {
+                            if (is_array($data['where']['fields'][$i])){
+                                $sql .= $mysqli->real_escape_string($data['where']['fields'][$i][1])."=?";
+                            }else{
+                                $sql .= $mysqli->real_escape_string($data['where']['fields'][$i]) . "=?";
+                            }
+                        } else {
+                            $sql .= " and " . $mysqli->real_escape_string($data['where']['fields'][$i]) . "=?";
+                        }
+                    }
+
+                    $stmt = $this->pdo->prepare($sql);
+                    //todo implement last insert id
+                    for ($i = 0; $i < count($data['where']['fields']); $i++) {
+                        $var = $data['where']['values'][$i - count($data['fields'])];
+                        $stmt->bindParam($i + 1, $var);
+                    }
+
+
+                    if (!$stmt->execute()) {
+                        $this->transactionError = 1;
+                        $this->errorMessage .= implode(' ', $stmt->errorInfo()) . '.';
+                    }
+
+                    break;
                 default:
                     $this->transactionError = 1;
                     $this->errorMessage .= 'Unsupported transaction action ' . $this->transactionArray['action'] . '.';
@@ -391,6 +422,12 @@ class Transaction
                 $parts = explode('.', $parts[0]);
                 $table = str_replace('`', '', $parts[1]);
                 return $table;
+
+            case 'DELETE':
+                $parts = explode('.', $sql);
+                $parts = explode(' ', $parts[1]);
+                $table = str_replace('`', '', $parts[0]);
+                return $table;
             default:
                 throw new Exception('Unsupported SQL');
         }
@@ -416,6 +453,11 @@ class Transaction
             case 'UPDATE':
                 $parts = explode('.', $sql);
                 $parts = explode(' ', $parts[0]);
+                $database = str_replace('`', '', $parts[1]);
+                return $database;
+            case 'DELETE':
+                $parts = explode('.', $sql);
+                $parts = explode('FROM ', $parts[0]);
                 $database = str_replace('`', '', $parts[1]);
                 return $database;
             default:
@@ -455,6 +497,9 @@ class Transaction
                     }
                 }
                 return $fields;
+
+            case 'DELETE':
+                return array();
             default:
                 throw new Exception("Invalid / unsupported SQL");
         }
